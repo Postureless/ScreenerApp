@@ -18,3 +18,7 @@ fun Stock.toStockEntity(): StockEntity {
         mic = mic
     )
 }
+
+fun List<StockEntity>.toStockList(): List<Stock> {
+    return map { it.toStock() }
+}
