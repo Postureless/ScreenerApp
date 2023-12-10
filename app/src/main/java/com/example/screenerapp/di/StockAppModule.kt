@@ -2,17 +2,18 @@ package com.example.screenerapp.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.screenerapp.data.StockListDataRepository
+import com.example.screenerapp.data.StockRepositoryImpl
 import com.example.screenerapp.data.local.dao.StockDao
 import com.example.screenerapp.data.local.database.StockDatabase
 import com.example.screenerapp.network.StockApiService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -21,11 +22,15 @@ object StockAppModule {
     @Provides
     @Singleton
     fun provideStockApi(): StockApiService {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(StockApiService.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-            .create()
+            .create(StockApiService::class.java)
     }
 
     @Provides
@@ -44,11 +49,11 @@ object StockAppModule {
 
     @Provides
     @Singleton
-    fun provideStockListDataRepository(
-        stockDao: StockDao,
+    fun provideStockRepository(
+        db: StockDatabase,
         api: StockApiService
-    ): StockListDataRepository {
-        return StockListDataRepository(stockDao, api)
+    ): StockRepositoryImpl {
+        return StockRepositoryImpl(db, api)
     }
 
 }

@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
-import com.example.screenerapp.ui.screens.ListingView
+import com.example.screenerapp.ui.screens.StockList.ListingView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

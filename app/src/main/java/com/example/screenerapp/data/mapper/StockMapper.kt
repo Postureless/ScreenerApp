@@ -11,14 +11,12 @@ fun StockEntity.toStock(): Stock {
     )
 }
 
-fun Stock.toStockEntity(): StockEntity {
-    return StockEntity(
-        name = name,
-        ticker = ticker,
-        mic = mic
-    )
-}
-
 fun List<StockEntity>.toStockList(): List<Stock> {
-    return map { it.toStock() }
+    return map { stockEntity ->
+        Stock(
+            name = stockEntity.name,
+            ticker = stockEntity.ticker,
+            mic = stockEntity.mic
+        )
+    }
 }
